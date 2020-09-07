@@ -168,69 +168,71 @@ function employeeSearch() {
     connection.query(query, function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
-        console.log("Employees: " + res[i].first_name, res[i].last_name);
+        console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
       }
       runSearch();
     });
   }
 
 
-// // function addEmployeeSearch() {
-// //   inquirer.prompt([{
-// //     name: "Add Employee First Name",
-// //     type: "input",
-// //     message: "What is the First Name of the Employee?",
-// //   },
-// //   {
-// //     name: "Add Employee Last Name",
-// //     type: "input",
-// //     message: "What is the Last Name of the Employee?",
+function addEmployeeSearch() {
+    var query = "SELECT * FROM employees";
+    var addEmployee = []
+    connection.query(query, function(err, res) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        addEmployee.push({name:res[i].first_name,name:res[i].last_name, role:res[i].title_id, value:res[i].id});
+      }
+  inquirer.prompt([
+{
+    name: "Add Employee First Name",
+    type: "input",
+    message: "What is the First Name of the Employee?",
+},
+{
+    name: "Add Employee Last Name",
+    type: "input",
+    message: "What is the Last Name of the Employee?",
 
-// //   },
-// //   {
-// //     name: "Employee Title",
-// //     type: "list",
-// //     message: "What is the Title of the Employee?",
-// //     choices: () => {
-// //       const departmentArr = [];
-// //       for (var i = 0; i < department.length; i++) {
-// //           departmentArr.push(department[i].name);
-// //       }
-// //       return [...departmentArr]
-// //   }
-// //   },
-// //   {
-// //     name: "Employee Salary",
-// //     type: "input",
-// //     message: "What is the annual salary for the role that you would like to add?"
+},
+{
+    name: "Employee Title",
+    type: "input",
+    message: "What is the Title of the Employee?",
+},
+{
+    name: "Manager ID",
+    type: "list",
+    message: "What is the ID for this Employee that You are Adding?",
+    choices: departments
+},
+])
+    .then(function(answer) {
+    var query = "INSERT INTO role set ?";
+    // connection.query("INSERT INTO role SET ?",
+    connection.query(query, {first_name:answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Employee ID"]}, function(err, res) {
+        if (err) throw err; 
+        console.log("Employee Successfully Added");
+    runSearch();
+    });
     
-// // },
-// // {
-// // var query = "SELECT * FROM employeedatabase_db WHERE ?";
-// // connection.query("INSERT INTO role SET ?",
-// //   {
-// //     first name: answers.firstname,
-// //     last name: answers.lastname,
-// //     title: answers.title,
-// //     salary: answers.salary,
-// //     department_id: departmentID
+});
+});
+}
 
-// // }
-// // )},
-// // {
-// //   function(err, res) {
-// //     if (err) throw err;
-// //     console.log("Set has been inserted!");
-// // },
-// // {
-// //   var query = "SELECT * FROM employeedatabase_db WHERE ?";
-// //   connection.query(query, function(err, res) {
-// //     if (err) throw err;
-// //     for (var i = 0; i < res.length; i++) {
-// //       console.log(res[i].addTitleSearch,res[i].salary );
-// // }
-// //     runSearch();
-// //   });
+//   function(err, res) {
+//     if (err) throw err;
+//     console.log("Set has been inserted!");
+// },
+// {
+//   var query = "SELECT * FROM employeedatabase_db WHERE ?";
+//   connection.query(query, function(err, res) {
+//     if (err) throw err;
+//     for (var i = 0; i < res.length; i++) {
+//       console.log(res[i].addTitleSearch,res[i].salary );
+// }
+//     runSearch();
+//   });
 
 
 
