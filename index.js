@@ -66,7 +66,7 @@ function runSearch() {
         break;
         
       case "Update Employee Titles":
-        addEmployeeSearch();
+        updateEmployeeSearch();
         break;
 
       case "Exit":
@@ -83,7 +83,7 @@ function departmentSearch() {
       connection.query(query, function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-          console.log("Departments: " + res[i].name);
+          console.log("Departments: " + res[i].name, );
         }
         runSearch();
       });
@@ -177,11 +177,13 @@ function employeeSearch() {
 
 function addEmployeeSearch() {
     var query = "SELECT * FROM employees";
+    var departments = []
     var addEmployee = []
     connection.query(query, function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
-        addEmployee.push({name:res[i].first_name,name:res[i].last_name, role:res[i].title_id, value:res[i].id});
+        addEmployee.push({name:res[i].first_name,name:res[i].last_name, role:res[i].title_id, value:res[i].id}), departments.push({name:res[i].name, value:res[i].id});
+
       }
   inquirer.prompt([
 {
@@ -197,8 +199,9 @@ function addEmployeeSearch() {
 },
 {
     name: "Employee Title",
-    type: "input",
+    type: "list",
     message: "What is the Title of the Employee?",
+    choices: departments
 },
 {
     name: "Manager ID",
@@ -209,13 +212,57 @@ function addEmployeeSearch() {
 ])
     .then(function(answer) {
     var query = "INSERT INTO role set ?";
+    console.log("Successfully Added!");
+    // console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
     // connection.query("INSERT INTO role SET ?",
-    connection.query(query, {first_name:answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Employee ID"]}, function(err, res) {
-        if (err) throw err; 
-        console.log("Employee Successfully Added");
+    // connection.query(query,function(err, res) {
+    //     if (err) throw err; 
+    //     console.log({first_name: answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Manager ID"]}, );
     runSearch();
-    });
+    // });
     
+});
+});
+}
+
+
+function updateEmployeeSearch() {
+  var query = "SELECT * FROM employees";
+  var employees = []
+  var departments = []
+  connection.query(query, function(err, res) {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      employees.push({name:res[i].first_name,name:res[i].last_name, role:res[i].title_id, value:res[i].id}), departments.push({name:res[i].name, value:res[i].id});
+    }
+
+inquirer.prompt([
+{
+  name: "Which Employee",
+  type: "list",
+  message: "Which Employee would You Like to Update?",
+  choices: employees
+},
+{
+  name: "Update Employee Title",
+  type: "List",
+  message: "Change Title would You Like to Change this Employee To?  ",
+  choices: employees
+
+},
+
+])
+  .then(function(answer) {
+  var query = "INSERT INTO role set ?";
+  console.log("Successfully Added!");
+  console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
+  // connection.query("INSERT INTO role SET ?",
+  connection.query(query,function(err, res) {
+      if (err) throw err; 
+      console.log({first_name: answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Manager ID"]}, );
+  runSearch();
+  });
+  
 });
 });
 }
@@ -236,29 +283,29 @@ function addEmployeeSearch() {
 
 
 
-// function exit() {
-//   inquirer.prompt([
-//       {
-//       name: "Exit",
-//       type: "input",
-//       message: "Enter ending position: ",
-//       validate: function(value) {
-//         if (isNaN(value) === false) 
-//         {
-//         return true;
-//         }
-//         return false;
-//         }
-//       }
-//   ])
-//     .then(function(answer) {
-//       var query = "SELECT position,FROM employeedatabase_db WHERE position BETWEEN ? AND ?";
-//       connection.query(query, [answer.runSearch, answer.exit], function(err, res) {
-//         if (err) throw err;
-//         for (var i = 0; i < res.length; i++) 
-//         runSearch();
-//       });
-//     })
+function exit() {
+  inquirer.prompt([
+      {
+      name: "Exit",
+      type: "input",
+      message: "Enter ending position: ",
+      validate: function(value) {
+        if (isNaN(value) === false) 
+        {
+        return true;
+        }
+        return false;
+        }
+      }
+  ])
+    .then(function(answer) {
+      var query = "SELECT position,FROM employeedatabase_db WHERE position BETWEEN ? AND ?";
+      connection.query(query, [answer.runSearch, answer.exit], function(err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) 
+        runSearch();
+      });
+    })
 //   })
 // })
-// }
+}

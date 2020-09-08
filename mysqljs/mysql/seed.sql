@@ -21,10 +21,12 @@ VALUES
 INSERT INTO employees
   (first_name, last_name, title_id, manager_id)
 VALUES
-  ('Carol', 'Jam', 1, NULL),
-  ('Bim', 'Bam', 2, 1),
-  ('Lim', 'Lam', 3, NULL),
-  ('Mim', 'Mam', 4, 3),
-  ('Gim', 'Gam', 5, NULL),
-  ('Nim', 'Nam', 6, NULL),
-  ('Vim', 'Vam', 7, 6);
+('Linda', 'Peters', '3', 3),
+('Jackie', 'Robinson','2' , 4),
+('Mark', 'Laddle', '5',5),
+('David', 'Tereisze', '4',2),
+('April', 'Handle', '3', 3),
+('Nina', 'Lipsette', '2', 4),
+('Jackie', 'Robinson', '2', 4),
+('Derek', 'June', '5', 5),
+('Mary', 'Owens', '3',3);
