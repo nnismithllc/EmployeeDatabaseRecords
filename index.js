@@ -83,7 +83,7 @@ function departmentSearch() {
       connection.query(query, function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-          console.log("Departments: " + res[i].name, );
+          console.log("Departments: " + res[i].name);
         }
         runSearch();
       });
@@ -229,14 +229,18 @@ function addEmployeeSearch() {
 function updateEmployeeSearch() {
   var query = "SELECT * FROM employees";
   var employees = []
-  var departments = []
+  var role = []
   connection.query(query, function(err, res) {
     if (err) throw err;
     for (var i = 0; i < res.length; i++) {
-      employees.push({name:res[i].first_name,name:res[i].last_name, role:res[i].title_id, value:res[i].id}), departments.push({name:res[i].name, value:res[i].id});
+      employees.push({name:res[i].first_name,name:res[i].last_name}); 
+      role.push ({name: res[i].title, name:res[i].department_id}); 
+      console.log(res)
+      // role.push({name:res[i].name, value:res[i].id});
     }
 
 inquirer.prompt([
+ 
 {
   name: "Which Employee",
   type: "list",
@@ -246,22 +250,21 @@ inquirer.prompt([
 {
   name: "Update Employee Title",
   type: "List",
-  message: "Change Title would You Like to Change this Employee To?  ",
-  choices: employees
-
+  message: "Change Title would You Like to Change this Employee To?",
+  choices: role
 },
 
 ])
   .then(function(answer) {
   var query = "INSERT INTO role set ?";
-  console.log("Successfully Added!");
-  console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
+  console.log(res);
+  // console.log("Employees: " + res[i].id, res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
   // connection.query("INSERT INTO role SET ?",
-  connection.query(query,function(err, res) {
-      if (err) throw err; 
-      console.log({first_name: answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Manager ID"]}, );
+  // connection.query(query,function(err, res) {
+  //     if (err) throw err; 
+  //     console.log({first_name: answer["Add Employee First Name"], last_name: answer["Add Employee Last Name"], title_id:answer["Employee Title"], department_id: answer["Manager ID"]}, );
   runSearch();
-  });
+  // });
   
 });
 });
@@ -281,31 +284,3 @@ inquirer.prompt([
 //     runSearch();
 //   });
 
-
-
-function exit() {
-  inquirer.prompt([
-      {
-      name: "Exit",
-      type: "input",
-      message: "Enter ending position: ",
-      validate: function(value) {
-        if (isNaN(value) === false) 
-        {
-        return true;
-        }
-        return false;
-        }
-      }
-  ])
-    .then(function(answer) {
-      var query = "SELECT position,FROM employeedatabase_db WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.runSearch, answer.exit], function(err, res) {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) 
-        runSearch();
-      });
-    })
-//   })
-// })
-}
