@@ -24,11 +24,6 @@ last_name VARCHAR(30) NOT NULL,
 title_id INT NOT NULL,
 manager_id INT,
 PRIMARY KEY (id)
+FOREIGN KEY (role)
 );
 
--- Join tables together --
-SELECT e.first_name, e.last_name, r.title, e.manager_id FROM employees AS e LEFT JOIN `role` as r on e.title_id= r.id;
-
-SELECT * FROM `departments`;
-SELECT * FROM `employees`;
-SELECT * FROM `role`;
