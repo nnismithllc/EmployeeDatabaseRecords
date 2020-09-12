@@ -118,6 +118,7 @@ function titleSearch() {
     for (var i = 0; i < res.length; i++) {
       console.log(res[i].title);
     }
+    
     runSearch();
   });
 }
@@ -129,17 +130,16 @@ function addTitleSearch() {
     connection.query(query, function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
-        departments.push({name:res[i].name, value:res[i].id});
-      }
+      departments.push({name:res[i].name, value:res[i].id});
+}
 
-      inquirer.prompt([
+    inquirer.prompt([
     {  
       name: 'Employee Title',
       type: 'input',
       message: 'What Employee Title would You like to Add ?',
       
     },
-  
     {
       name: "Employee Salary",
       type: "input",
@@ -151,21 +151,19 @@ function addTitleSearch() {
       type: "list",
       message: "What is the ID for this Title that You are Adding?",
       choices: departments
-  },
-  
+  }, 
     ])
     .then(function(answer) {
-        var query = "INSERT INTO role SET ?";
-        connection.query(query, { title: answer["Employee Title"], department_id:answer["Employee ID"], salary:answer["Employee Salary"] }, function(err, res) {
-          if (err) throw err;
-            console.log(res);
-          runSearch();
+      var query = "INSERT INTO role SET ?";
+      connection.query(query, { title: answer["Employee Title"], department_id:answer["Employee ID"], salary:answer["Employee Salary"] }, function(err, res) {
+      if (err) throw err;
+      console.log(res);
+        
+        runSearch();
         });
       });
     });
     
-
- 
 }
 
 // View Employee Function
@@ -174,7 +172,7 @@ function employeeSearch() {
     connection.query(query, function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
-        console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
+      console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
       }
       runSearch();
     });
@@ -239,17 +237,17 @@ function updateEmployeeSearch() {
     for (var i = 0; i < res.length; i++) {
     employees.push({name:res[i].first_name + " " + res[i].last_name, value:res[i].id}) 
 
-    }
+}
 
     var departmentsA = []
     var query = "SELECT * FROM role";
     connection.query(query, function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        departmentsA.push({name:res[i].title, value: res[i].id});
-      }
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+    departmentsA.push({name:res[i].title, value: res[i].id});
+    }
 
-    });
+});
 
 
 
@@ -268,7 +266,6 @@ inquirer.prompt([
     message: 'Which Title would You Like to Change this Employee To?',
     choices: departmentsA
 },
-
 ])
     .then(function(res) {
     console.log(res)
