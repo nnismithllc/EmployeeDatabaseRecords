@@ -98,13 +98,13 @@ function addDepartmentSearch() {
   inquirer.prompt({
       name: 'Add Department',
       type: 'input',
-      message: 'What department would you like to add?',
+      message: 'What Department would you like to add?',
     })
     .then(function(answer) {
       var query = "INSERT INTO departments SET ?";
-      connection.query(query, { name: answer["Add Department"] }, function(err, res) {
+      connection.query(query,  {name: answer["Add Department"] }, function(err, res) {
         if (err) throw err;
-          console.log(res + "Successfully Added");
+          console.log("Successfully Added");
         runSearch();
       });
     });
@@ -118,7 +118,7 @@ function titleSearch() {
     for (var i = 0; i < res.length; i++) {
       console.log(res[i].title);
     }
-    
+
     runSearch();
   });
 }
@@ -157,7 +157,7 @@ function addTitleSearch() {
       var query = "INSERT INTO role SET ?";
       connection.query(query, { title: answer["Employee Title"], department_id:answer["Employee ID"], salary:answer["Employee Salary"] }, function(err, res) {
       if (err) throw err;
-      console.log(res);
+      console.log("Title has Been Added");
         
         runSearch();
         });
@@ -172,7 +172,7 @@ function employeeSearch() {
     connection.query(query, function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
-      console.log("Employees: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
+      console.log("Employee: " + res[i].first_name, res[i].last_name,res[i].title_id, res[i].manager_id);
       }
       runSearch();
     });
@@ -188,6 +188,13 @@ function addEmployeeSearch() {
     for (var i = 0; i < res.length; i++) {
     departments.push({name:res[i].first_name, name:res[i].last_name, value:res[i].id, name:res[i].name});
 }
+var rolesA = []
+    var query = "SELECT * FROM role";
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+    rolesA.push({name:res[i].title, value: res[i].id});
+    }
 
 // Question Prompts to Add Employees
   inquirer.prompt([
@@ -206,7 +213,7 @@ function addEmployeeSearch() {
     name: 'Employee Title',
     type: 'list',
     message: "What is the Title of the Employee?",
-    choices:["Program Manager", "Accountant", "Product Controller", "Human Resources", "Shipping Clerk"] 
+    choices: rolesA
 },
 {
     name: 'Manager ID',
@@ -215,14 +222,23 @@ function addEmployeeSearch() {
     choices: departments
 },
 ])
-    .then(function(_res) {
-    connection.query(query, function(err, res) {
-    if (err) throw err;
-    console.log("Successfully Added");
+    .then(function(one) {
+      var query = "INSERT INTO employees SET ?";
+      connection.query(query, { first_name: one["Add Employee First Name"], last_name:one["Add Employee Last Name"], title_id:one["Employee Title"] }, function(err, res) {
+      if (err) throw err;
+      console.log("Title has Been Added");
+        
+        runSearch();
+        });
+//     var query = "INSERT INTO employees SET first_name, last_name, title_id = ? WHERE id = ?";
+//     connection.query(query, function(err, res) {
+//     if (err) throw err;
+//     console.log("Successfully Added");
    
-    runSearch();
-});
+//     runSearch();
+// });
 });   
+});
 });
 }
 
@@ -269,11 +285,11 @@ inquirer.prompt([
 ])
     .then(function(res) {
     console.log(res)
-    var query = "UPDATE employees set title_id = ? WHERE id =?";
-    connection.query(query, [res["Update Employee Title"],res["Which Employee"]], function(err, answer) {
-    if (err) throw answer;
+    var query = "UPDATE employees set title_id = ? WHERE id = ?";
+    connection.query(query, [res["Update Employee Title"],res["Which Employee"]], function(err, res) {
+    if (err) throw res;
     console.log("Employee Title has been Changed!")
-  
+      
     runSearch();
 });
 });
