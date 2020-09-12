@@ -271,11 +271,11 @@ inquirer.prompt([
 
 ])
     .then(function(res) {
-   
+    console.log(res)
     var query = "UPDATE employees set title_id = ? WHERE id =?";
     connection.query(query, [res["Update Employee Title"],res["Which Employee"]], function(err, answer) {
     if (err) throw answer;
-    console.log("Successfully Updated")
+    console.log("Employee Title has been Changed!")
   
     runSearch();
 });

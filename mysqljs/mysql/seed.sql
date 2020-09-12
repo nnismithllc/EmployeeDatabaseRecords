@@ -30,3 +30,5 @@ VALUES
 ('Jackie', 'Robinson', '4', 217),
 ('Derek', 'June', '5', 521),
 ('Mary', 'Owens', '3',201);
+
+-- SELECT e.first_name, e.last_name, r.title, e.manager_id, e.id FROM employeedatabase_db.employees AS e LEFT JOIN `role` as r on e.title_id= r.id
